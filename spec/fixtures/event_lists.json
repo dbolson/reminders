@@ -1,0 +1,15 @@
+{
+  "event_lists": [{
+    "id":1,
+    "name":"name",
+    "created_at":"2013-04-19T00:00:00Z",
+    "updated_at":"2013-04-19T00:00:00Z"
+  },
+  {
+    "id":2,
+    "name":"another name",
+    "created_at":"2013-04-19T00:00:01Z",
+    "updated_at":"2013-04-19T00:00:01Z"
+  }],
+  "status":200
+}
