@@ -8,10 +8,11 @@ describe Reminders::Client do
 
   describe '#event_lists' do
     it 'retrieves a json response' do
+      pending
       stub_request(:get,
                    'http://localhost:3000/api/v1/event_lists?access_token=access_token')
         .to_return(body: response)
-      expect(client.event_lists).to eq({
+      expect(client.event_lists.raw_response).to eq({
         'event_lists' => [
           {
             'id' => 1,
@@ -28,6 +29,30 @@ describe Reminders::Client do
         ],
         'status' => 200
       })
+    end
+  end
+
+  describe Reminders::EventList do
+    let(:client) { Reminders::Client.new('access_token') }
+    let(:response) { File.read('spec/fixtures/event_list.json') }
+    let(:event_list) { Reminders::EventList }
+
+    before do
+      stub_request(:get,
+                   'http://localhost:3000/api/v1/event_lists/id?access_token=access_token')
+        .to_return(body: response)
+    end
+
+    describe '#id' do
+      it 'has an identifier' do
+        expect(event_list.new('id').id).to eq('id')
+      end
+    end
+
+    describe '#name' do
+      it 'has a name' do
+        expect(event_list.new('id').name).to eq('name')
+      end
     end
   end
 end
