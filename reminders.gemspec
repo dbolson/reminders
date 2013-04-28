@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'reminders_client/version'
+require 'reminders/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'reminders_client'
-  spec.version       = RemindersClient::VERSION
+  spec.name          = 'reminders'
+  spec.version       = Reminders::VERSION
   spec.authors       = ['Danny Olson']
   spec.email         = ['dbolson@gmail.com']
   spec.description   = %q{A Ruby interface to the Reminders API.}

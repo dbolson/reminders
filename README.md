@@ -1,6 +1,6 @@
 # reminders-api client
 ```
-f = FooClient.new(email, api_key)
+f = Reminders::Client.new(email, api_key)
 f.event_lists
   [event_list1, event_list2]
 f.event_list(id)
