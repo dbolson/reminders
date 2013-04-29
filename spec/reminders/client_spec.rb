@@ -1,9 +1,5 @@
 require 'spec_helper'
-require 'reminders/configuration'
-require 'reminders/client'
-require 'reminders/request'
-require 'reminders/response'
-require 'reminders/event_list'
+require 'reminders'
 
 describe Reminders::Client do
   let(:client) { Reminders::Client }
