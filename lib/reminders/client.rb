@@ -1,16 +1,27 @@
 module Reminders
+  class Error < StandardError; end
+  class UnauthorizedError < Error; end
+
   class Client
+    attr_reader :access_token
+
     def initialize(access_token=nil)
-      @access_token = access_token
+      if access_token.nil?
+        @access_token = Reminders.configuration.access_token
+      else
+        @access_token = access_token
+      end
     end
 
     def event_list(id)
+      if access_token.nil?
+        raise UnauthorizedError.new('Please set your access token')
+      end
+
       EventList.new(response(url(id)))
     end
 
     private
-
-    attr_reader :access_token
 
     def url(id)
       "#{base_url}event_lists/#{id}?#{parameters}"

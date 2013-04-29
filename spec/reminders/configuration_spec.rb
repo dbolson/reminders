@@ -2,21 +2,32 @@ require 'spec_helper'
 require 'reminders/configuration'
 
 describe Reminders::Configuration do
-  before do
-    Reminders::configure do |config|
-    end
-  end
+  describe '#access_token' do
+    context 'when specified' do
+      before do
+        Reminders::configure do |config|
+          config.access_token = 'access-token'
+        end
+      end
 
-  describe 'with an access token' do
-    before do
-      Reminders::configure do |config|
-        config.access_token = 'access token'
+      after do
+        Reminders.configuration = nil
+      end
+
+      it 'sets the access token' do
+        expect(Reminders.configuration.access_token).to eq('access-token')
       end
     end
 
-    specify do
-      expect(Reminders.configuration.access_token)
-        .to eq('access token')
+    context 'when not specified' do
+      before do
+        Reminders::configure do |config|
+        end
+      end
+
+      it 'defaults to nil' do
+        expect(Reminders.configuration.access_token).to be_nil
+      end
     end
   end
 end
