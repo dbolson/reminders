@@ -63,12 +63,17 @@ describe Reminders::Client do
   end
 
   describe '#event_list' do
+    let(:response) { File.read('spec/fixtures/event_list.json') }
+
     before do
+      Reminders::configure do |config|
+        config.access_token = 'access-token'
+      end
+
       stub_request(:get,
                    'http://localhost:3000/api/v1/event_lists/1?access_token=access-token')
         .to_return(body: response)
     end
-    let(:response) { File.read('spec/fixtures/event_list.json') }
 
     specify do
       expect(client.new('access-token').event_list(1).id).to eq(1)

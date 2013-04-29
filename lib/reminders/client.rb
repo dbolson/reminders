@@ -18,22 +18,10 @@ module Reminders
         raise UnauthorizedError.new('Please set your access token')
       end
 
-      EventList.new(response(url(id)))
+      EventList.new(response(id))
     end
 
     private
-
-    def url(id)
-      "#{base_url}event_lists/#{id}?#{parameters}"
-    end
-
-    def base_url
-      'http://localhost:3000/api/v1/'
-    end
-
-    def parameters
-      "access_token=#{access_token}"
-    end
 
     def response(url)
       Response.new.parse(Request.new.get(url))
