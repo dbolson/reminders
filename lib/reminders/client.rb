@@ -33,6 +33,24 @@ module Reminders
       response['event_list']['name']
     end
 
+    def created_at
+      url = "http://localhost:3000/api/v1/event_lists/#{id}?access_token=access_token"
+      response = Client.new('access token').get(url)
+      response['event_list']['created_at']
+    end
+
+    def updated_at
+      url = "http://localhost:3000/api/v1/event_lists/#{id}?access_token=access_token"
+      response = Client.new('access token').get(url)
+      response['event_list']['updated_at']
+    end
+
+    def status_code
+      url = "http://localhost:3000/api/v1/event_lists/#{id}?access_token=access_token"
+      response = Client.new('access token').get(url)
+      response['status']
+    end
+
     private
   end
 end

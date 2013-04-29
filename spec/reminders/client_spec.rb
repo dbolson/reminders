@@ -44,14 +44,32 @@ describe Reminders::Client do
     end
 
     describe '#id' do
-      it 'has an identifier' do
+      specify do
         expect(event_list.new('id').id).to eq('id')
       end
     end
 
     describe '#name' do
-      it 'has a name' do
+      specify do
         expect(event_list.new('id').name).to eq('name')
+      end
+    end
+
+    describe '#created_at' do
+      specify do
+        expect(event_list.new('id').created_at).to eq('2013-04-19T00:00:00Z')
+      end
+    end
+
+    describe '#updated_at' do
+      specify do
+        expect(event_list.new('id').updated_at).to eq('2013-04-19T00:00:01Z')
+      end
+    end
+
+    describe '#status_code' do
+      specify do
+        expect(event_list.new('id').status_code).to eq(200)
       end
     end
   end
