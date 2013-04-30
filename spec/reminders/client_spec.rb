@@ -62,10 +62,6 @@ describe Reminders::Client do
     let(:response) { File.read('spec/fixtures/event_list.json') }
 
     before do
-      Reminders::configure do |config|
-        config.access_token = 'access-token'
-      end
-
       stub_request(:get,
                    'http://localhost:3000/api/v1/event_lists/1?access_token=access-token')
         .to_return(body: response)
@@ -75,4 +71,22 @@ describe Reminders::Client do
       expect(client.new('access-token').event_list(1).id).to eq(1)
     end
   end
+
+  #describe '#create_event_list' do
+    #before do
+      #Reminders::configure do |config|
+        #config.access_token = 'access-token'
+      #end
+    #end
+
+    #context 'with valid params' do
+      #it 'creates an event list' do
+        #client.new
+      #end
+    #end
+
+    #context 'with invalid params' do
+      #it 'shows errors'
+    #end
+  #end
 end

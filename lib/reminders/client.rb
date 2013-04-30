@@ -21,7 +21,7 @@ module Reminders
     private
 
     def response(url)
-      Response.new.parse(Request.new.get(url))
+      Response.new.parse(Request.new(access_token).get(url))
     end
   end
 end
