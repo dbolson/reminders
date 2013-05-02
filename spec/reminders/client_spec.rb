@@ -50,7 +50,7 @@ describe Reminders::Client do
 
         it 'raises an exception' do
           expect {
-            client.new.event_list('id')
+            client.new
           }.to raise_error(Reminders::UnauthorizedError,
                            'Please set your access token')
         end
