@@ -28,10 +28,4 @@ describe Reminders::EventList do
       expect(event_list.new(response).updated_at).to eq('2013-04-19T00:00:01Z')
     end
   end
-
-  describe '#status_code' do
-    specify do
-      expect(event_list.new(response).status_code).to eq(200)
-    end
-  end
 end

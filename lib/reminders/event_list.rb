@@ -22,10 +22,6 @@ module Reminders
       response['event_list']['updated_at']
     end
 
-    def status_code
-      response['status']
-    end
-
     private
 
     attr_accessor :response
