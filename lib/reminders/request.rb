@@ -5,7 +5,14 @@ module Reminders
     end
 
     def get(id)
-      response = RestClient.get(url(id))
+      RestClient.get(url(id))
+    end
+
+    def post(params)
+      url = 'http://localhost:3000/api/v1'
+      url += "/event_lists"
+      url += "?access_token=#{access_token}"
+      RestClient.post(url, params)
     end
 
     private

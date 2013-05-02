@@ -8,20 +8,30 @@ module Reminders
       else
         @access_token = access_token
       end
+
+      if @access_token.nil?
+        raise UnauthorizedError.new('Please set your access token')
+      end
     end
 
     def event_list(id)
-      if access_token.nil?
-        raise UnauthorizedError.new('Please set your access token')
-      end
+      request = Request.new(access_token).get(id)
+      response = Response.new.parse(request)
 
-      EventList.new(response(id))
+      EventList.new(response)
+    end
+
+    def create_event_list(params)
+      request = Request.new(access_token).post(params)
+      response = Response.new.parse(request)
+
+      EventList.new(response)
     end
 
     private
 
-    def response(url)
-      Response.new.parse(Request.new(access_token).get(url))
+    def response(id)
+      #Response.new.parse(Request.new(access_token).get(id))
     end
   end
 end
