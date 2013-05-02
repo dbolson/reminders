@@ -28,4 +28,22 @@ describe Reminders::EventList do
       expect(event_list.new(response).updated_at).to eq('2013-04-19T00:00:01Z')
     end
   end
+
+  describe '#errors' do
+    context 'with errors' do
+      let(:response) {
+        JSON.parse(File.read('spec/fixtures/event_list_with_errors.json'))
+      }
+
+      it 'displays a list of errors' do
+        expect(event_list.new(response).errors).to eq(["Name can't be blank"])
+      end
+    end
+
+    context 'without errors' do
+      specify do
+        expect(event_list.new(response).errors).to be_nil
+      end
+    end
+  end
 end

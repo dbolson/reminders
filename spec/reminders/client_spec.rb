@@ -90,8 +90,22 @@ describe Reminders::Client do
       end
     end
 
-    #context 'with invalid params' do
-      #it 'shows errors'
-    #end
+    context 'with invalid params' do
+      let(:response) { File.read('spec/fixtures/event_list_with_errors.json') }
+
+      before do
+        stub_request(:post,
+                     'http://localhost:3000/api/v1/event_lists?access_token=access-token')
+          .to_return(body: response)
+      end
+
+      it 'shows errors' do
+        params = { event_list: { name: 'invalid'}}
+        event_list = client.new('access-token').create_event_list(params)
+
+        expect(event_list.id).to be_nil
+        expect(event_list.errors).to eq(["Name can't be blank"])
+      end
+    end
   end
 end

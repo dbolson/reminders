@@ -22,6 +22,10 @@ module Reminders
       response['event_list']['updated_at']
     end
 
+    def errors
+      response['errors']
+    end
+
     private
 
     attr_accessor :response
