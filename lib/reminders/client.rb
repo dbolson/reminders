@@ -21,6 +21,16 @@ module Reminders
       EventList.new(response)
     end
 
+    def event_lists
+      request = Request.new(access_token).get
+      response = Response.new.parse(request)
+
+      #puts response.inspect
+      response['event_lists'].map do |event_list|
+        EventList.new(event_list)
+      end
+    end
+
     def create_event_list(params)
       request = Request.new(access_token).post(params)
       response = Response.new.parse(request)

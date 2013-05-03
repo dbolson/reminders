@@ -72,6 +72,25 @@ describe Reminders::Client do
     end
   end
 
+  describe '#event_lists' do
+    let(:response) { File.read('spec/fixtures/event_lists.json') }
+
+    before do
+      stub_request(:get,
+                   'http://localhost:3000/api/v1/event_lists?access_token=access-token')
+        .to_return(body: response)
+    end
+
+    it 'is a list of EventLists' do
+      result = client.new('access-token').event_lists
+      expect(result.first.id).to eq(1)
+      expect(result.first.name).to eq('name')
+
+      expect(result.last.id).to eq(2)
+      expect(result.last.name).to eq('another name')
+    end
+  end
+
   describe '#create_event_list' do
     context 'with valid params' do
       let(:response) { File.read('spec/fixtures/event_list.json') }
@@ -106,6 +125,16 @@ describe Reminders::Client do
         expect(event_list.id).to be_nil
         expect(event_list.errors).to eq(["Name can't be blank"])
       end
+    end
+  end
+
+  describe '#update_event_list' do
+    context 'with valid params' do
+      it 'updates the event list'
+    end
+
+    context 'with invalid params' do
+      it 'shows errors'
     end
   end
 end
