@@ -58,83 +58,148 @@ describe Reminders::Client do
     end
   end
 
-  describe '#event_list' do
-    let(:response) { File.read('spec/fixtures/event_list.json') }
-
+  describe 'api methods' do
     before do
-      stub_request(:get,
-                   'http://localhost:3000/api/v1/event_lists/1?access_token=access-token')
-        .to_return(body: response)
+      Reminders::configure do |config|
+        config.access_token = 'access-token'
+      end
     end
 
-    it 'is an EventList' do
-      expect(client.new('access-token').event_list(1).id).to eq(1)
-    end
-  end
-
-  describe '#event_lists' do
-    let(:response) { File.read('spec/fixtures/event_lists.json') }
-
-    before do
-      stub_request(:get,
-                   'http://localhost:3000/api/v1/event_lists?access_token=access-token')
-        .to_return(body: response)
-    end
-
-    it 'is a list of EventLists' do
-      result = client.new('access-token').event_lists
-      expect(result.first.id).to eq(1)
-      expect(result.first.name).to eq('name')
-
-      expect(result.last.id).to eq(2)
-      expect(result.last.name).to eq('another name')
-    end
-  end
-
-  describe '#create_event_list' do
-    context 'with valid params' do
+    describe '#event_list' do
       let(:response) { File.read('spec/fixtures/event_list.json') }
+      let(:result) { client.new.event_list(1) }
 
       before do
-        stub_request(:post,
-                     'http://localhost:3000/api/v1/event_lists?access_token=access-token')
-          .to_return(body: response)
+        stub_request(:get,
+                     'http://localhost:3000/api/v1/event_lists/1?access_token=access-token')
+          .to_return(body: response, status: 200)
       end
 
-      it 'creates an event list' do
-        params = { event_list: { name: 'name' }}
-        event_list = client.new('access-token').create_event_list(params)
-
-        expect(event_list.id).to eq(1)
-      end
+      specify { expect(result).to be_a_kind_of(Reminders::EventList) }
+      specify { expect(result.id).to eq(1) }
+      specify { expect(result.name).to eq('name') }
+      specify { expect(result.created_at).to eq('2000-01-01T00:00:00Z') }
+      specify { expect(result.updated_at).to eq('2000-01-01T00:00:01Z') }
+      specify { expect(result.status).to eq(200) }
     end
 
-    context 'with invalid params' do
-      let(:response) { File.read('spec/fixtures/event_list_with_errors.json') }
+    describe '#event_lists' do
+      let(:response) { File.read('spec/fixtures/event_lists.json') }
+      let(:result) { client.new.event_lists }
+      let(:event_list1) { result[0] }
+      let(:event_list2) { result[1] }
 
       before do
-        stub_request(:post,
+        stub_request(:get,
                      'http://localhost:3000/api/v1/event_lists?access_token=access-token')
-          .to_return(body: response)
+          .to_return(body: response, status: 200)
       end
 
-      it 'shows errors' do
-        params = { event_list: { name: 'invalid'}}
-        event_list = client.new('access-token').create_event_list(params)
+      it 'is a collection of EventLists' do
+        expect(event_list1).to be_a_kind_of(Reminders::EventList)
+        expect(event_list1.id).to eq(1)
+        expect(event_list2).to be_a_kind_of(Reminders::EventList)
+        expect(event_list2.id).to eq(2)
+      end
 
-        expect(event_list.id).to be_nil
-        expect(event_list.errors).to eq(["Name can't be blank"])
+      specify { expect(event_list1.status).to eq(200) }
+      specify { expect(event_list2.status).to eq(200) }
+    end
+
+    describe '#create_event_list' do
+      context 'with valid params' do
+        let(:response) { File.read('spec/fixtures/event_list.json') }
+        let(:result) { client.new.create_event_list(name: 'name') }
+
+        before do
+          stub_request(:post,
+                       'http://localhost:3000/api/v1/event_lists?access_token=access-token')
+            .to_return(body: response, status: 201)
+        end
+
+        it 'creates an event list' do
+          expect(result).to be_a_kind_of(Reminders::EventList)
+        end
+
+        specify { expect(result.status).to eq(201) }
+      end
+
+      context 'with invalid params' do
+        let(:response) {
+          File.read('spec/fixtures/event_list_with_errors.json')
+        }
+        let(:result) { client.new.create_event_list(name: 'invalid') }
+
+        before do
+          stub_request(:post,
+                       'http://localhost:3000/api/v1/event_lists?access_token=access-token')
+            .to_return(body: response, status: 422)
+        end
+
+        it 'shows errors' do
+          expect(result.id).to be_nil
+          expect(result.errors).to eq(["Name can't be blank"])
+        end
+
+        specify { expect(result.status).to eq(422) }
       end
     end
-  end
 
-  describe '#update_event_list' do
-    context 'with valid params' do
-      it 'updates the event list'
+    describe '#update_event_list' do
+      context 'with valid params' do
+        let(:response) { File.read('spec/fixtures/event_list.json') }
+        let(:result) { client.new.update_event_list(1, name: 'name') }
+
+        before do
+          stub_request(:put,
+                       'http://localhost:3000/api/v1/event_lists/1?access_token=access-token')
+            .to_return(body: response, status: 200)
+        end
+
+        it 'updates the event list' do
+          expect(result).to be_a_kind_of(Reminders::EventList)
+        end
+
+        specify { expect(result.status).to eq(200) }
+      end
+
+      context 'with invalid params' do
+        let(:response) {
+          File.read('spec/fixtures/event_list_with_errors.json')
+        }
+        let(:result) { client.new.update_event_list(1, name: 'invalid') }
+
+        before do
+          stub_request(:put,
+                       'http://localhost:3000/api/v1/event_lists/1?access_token=access-token')
+            .to_return(body: response, status: 304)
+        end
+
+        it 'shows errors' do
+          expect(result.name).to eq('')
+          expect(result.errors).to eq(["Name can't be blank"])
+        end
+
+        specify { expect(result.status).to eq(304) }
+      end
     end
 
-    context 'with invalid params' do
-      it 'shows errors'
+    describe '#delete_event_list' do
+      let(:response) { File.read('spec/fixtures/event_list.json') }
+      let(:result) { client.new.delete_event_list(1) }
+
+      before do
+        stub_request(:delete,
+                     'http://localhost:3000/api/v1/event_lists/1?access_token=access-token')
+            .to_return(body: response, status: 200)
+      end
+
+      it 'deletes the event list' do
+        expect(result.name).to eq('name')
+        event_list = client.new.delete_event_list(1)
+      end
+
+      specify { expect(result.status).to eq(200) }
     end
   end
 end
