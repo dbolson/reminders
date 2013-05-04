@@ -60,7 +60,7 @@ describe Reminders::EventList do
   describe '#raw_response' do
     it 'shows the response string' do
       expect(event_list.new(response, params).raw_response)
-        .to eq(response.to_s)
+        .to eq(File.read('spec/fixtures/event_list.json').gsub(/\n|\s/, ''))
     end
   end
 end

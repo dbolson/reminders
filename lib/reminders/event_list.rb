@@ -28,7 +28,7 @@ module Reminders
     end
 
     def raw_response
-      response.to_s
+      response.to_json
     end
 
     private
