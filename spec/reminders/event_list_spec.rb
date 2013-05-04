@@ -26,13 +26,15 @@ describe Reminders::EventList do
 
   describe '#created_at' do
     specify do
-      expect(event_list.new(response, params).created_at).to eq('2000-01-01T00:00:00Z')
+      expect(event_list.new(response, params).created_at)
+        .to eq('2000-01-01T00:00:00Z')
     end
   end
 
   describe '#updated_at' do
     specify do
-      expect(event_list.new(response, params).updated_at).to eq('2000-01-01T00:00:01Z')
+      expect(event_list.new(response, params).updated_at)
+        .to eq('2000-01-01T00:00:01Z')
     end
   end
 
@@ -43,7 +45,8 @@ describe Reminders::EventList do
       }
 
       it 'displays a list of errors' do
-        expect(event_list.new(response, params).errors).to eq(["Name can't be blank"])
+        expect(event_list.new(response, params).errors)
+          .to eq(["Name can't be blank"])
       end
     end
 
@@ -51,6 +54,13 @@ describe Reminders::EventList do
       specify do
         expect(event_list.new(response, params).errors).to be_nil
       end
+    end
+  end
+
+  describe '#raw_response' do
+    it 'shows the response string' do
+      expect(event_list.new(response, params).raw_response)
+        .to eq(response.to_s)
     end
   end
 end

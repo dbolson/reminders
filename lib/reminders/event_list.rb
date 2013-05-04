@@ -27,6 +27,10 @@ module Reminders
       response['errors']
     end
 
+    def raw_response
+      response.to_s
+    end
+
     private
 
     attr_accessor :response
