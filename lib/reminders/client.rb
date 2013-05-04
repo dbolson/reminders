@@ -18,16 +18,15 @@ module Reminders
       request = Request.new(access_token).get(id)
       response = Response.new.parse(request)
 
-      EventList.new(response)
+      EventList.new(response, status: request.code)
     end
 
     def event_lists
       request = Request.new(access_token).get
       response = Response.new.parse(request)
 
-      #puts response.inspect
-      response['event_lists'].map do |event_list|
-        EventList.new(event_list)
+      response.map do |event_list|
+        EventList.new(event_list, status: request.code)
       end
     end
 
@@ -35,13 +34,21 @@ module Reminders
       request = Request.new(access_token).post(params)
       response = Response.new.parse(request)
 
-      EventList.new(response)
+      EventList.new(response, status: request.code)
     end
 
-    private
+    def update_event_list(id, params)
+      request = Request.new(access_token).put(id, params)
+      response = Response.new.parse(request)
 
-    def response(id)
-      #Response.new.parse(Request.new(access_token).get(id))
+      EventList.new(response, status: request.code)
+    end
+
+    def delete_event_list(id)
+      request = Request.new(access_token).delete(id)
+      response = Response.new.parse(request)
+
+      EventList.new(response, status: request.code)
     end
   end
 end
