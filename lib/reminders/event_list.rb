@@ -1,25 +1,26 @@
 module Reminders
   class EventList
-    attr_accessor :id
+    attr_accessor :status
 
-    def initialize(response)
+    def initialize(response, args)
       @response = response
+      @status = args[:status]
     end
 
     def id
-      response['event_list']['id']
+      response['id']
     end
 
     def name
-      response['event_list']['name']
+      response['name']
     end
 
     def created_at
-      response['event_list']['created_at']
+      response['created_at']
     end
 
     def updated_at
-      response['event_list']['updated_at']
+      response['updated_at']
     end
 
     def errors
