@@ -75,7 +75,7 @@ describe Reminders::Client do
           .to_return(body: response, status: 200)
       end
 
-      specify { expect(result).to be_a_kind_of(Reminders::EventList) }
+      specify { expect(result).to be_a_kind_of(Reminders::Api::EventList) }
       specify { expect(result.id).to eq(1) }
       specify { expect(result.name).to eq('name') }
       specify { expect(result.created_at).to eq('2000-01-01T00:00:00Z') }
@@ -96,9 +96,9 @@ describe Reminders::Client do
       end
 
       it 'is a collection of EventLists' do
-        expect(event_list1).to be_a_kind_of(Reminders::EventList)
+        expect(event_list1).to be_a_kind_of(Reminders::Api::EventList)
         expect(event_list1.id).to eq(1)
-        expect(event_list2).to be_a_kind_of(Reminders::EventList)
+        expect(event_list2).to be_a_kind_of(Reminders::Api::EventList)
         expect(event_list2.id).to eq(2)
       end
 
@@ -118,7 +118,7 @@ describe Reminders::Client do
         end
 
         it 'creates an event list' do
-          expect(result).to be_a_kind_of(Reminders::EventList)
+          expect(result).to be_a_kind_of(Reminders::Api::EventList)
         end
 
         specify { expect(result.status).to eq(201) }
@@ -157,7 +157,7 @@ describe Reminders::Client do
         end
 
         it 'updates the event list' do
-          expect(result).to be_a_kind_of(Reminders::EventList)
+          expect(result).to be_a_kind_of(Reminders::Api::EventList)
         end
 
         specify { expect(result.status).to eq(200) }

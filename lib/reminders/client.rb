@@ -54,7 +54,7 @@ module Reminders
     private
 
     def build_event_list(request, response)
-      EventList.new(response, status: request.code)
+      Api::EventList.new(response, status: request.code)
     end
   end
 end

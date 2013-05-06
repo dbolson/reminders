@@ -1,8 +1,8 @@
 require 'spec_helper'
-require 'reminders/event_list'
+require 'reminders/api/event_list'
 
-describe Reminders::EventList do
-  let(:event_list) { Reminders::EventList }
+describe Reminders::Api::EventList do
+  let(:event_list) { Reminders::Api::EventList }
   let(:response) { JSON.parse(File.read('spec/fixtures/event_list.json')) }
   let(:params) {{ status: 200 }}
 
