@@ -172,7 +172,7 @@ describe Reminders::Client do
         before do
           stub_request(:put,
                        'http://localhost:3000/api/v1/event_lists/1?access_token=access-token')
-            .to_return(body: response, status: 304)
+            .to_return(body: response, status: 422)
         end
 
         it 'shows errors' do
@@ -180,7 +180,7 @@ describe Reminders::Client do
           expect(result.errors).to eq(["Name can't be blank"])
         end
 
-        specify { expect(result.status).to eq(304) }
+        specify { expect(result.status).to eq(422) }
       end
     end
 

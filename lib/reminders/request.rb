@@ -37,7 +37,7 @@ module Reminders
       url += "?access_token=#{access_token}"
       RestClient.put(url, params) do |response, request, result, &blk|
         case response.code
-        when 304
+        when 422
           response
         else
           response.return!(request, result, &blk)
