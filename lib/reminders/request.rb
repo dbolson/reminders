@@ -5,61 +5,50 @@ module Reminders
     end
 
     def get(id=nil)
-      if id
-        url = 'http://localhost:3000/api/v1'
-        url += "/event_lists/#{id}"
-        url += "?access_token=#{access_token}"
-      else
-        url = 'http://localhost:3000/api/v1'
-        url += "/event_lists"
-        url += "?access_token=#{access_token}"
-      end
-      RestClient.get(url)
+      api_call(:get, url(id))
     end
 
     def post(params)
-      url = 'http://localhost:3000/api/v1'
-      url += "/event_lists"
-      url += "?access_token=#{access_token}"
-      RestClient.post(url, params) do |response, request, result, &blk|
-        case response.code
-        when 422
-          response
-        else
-          response.return!(request, result, &blk)
-        end
-      end
+      api_call(:post, url, params)
     end
 
     def put(id, params)
-      url = 'http://localhost:3000/api/v1'
-      url += "/event_lists/#{id}"
-      url += "?access_token=#{access_token}"
-      RestClient.put(url, params) do |response, request, result, &blk|
-        case response.code
-        when 422
-          response
-        else
-          response.return!(request, result, &blk)
-        end
-      end
+      api_call(:put, url(id), params)
     end
 
     def delete(id)
-      url = 'http://localhost:3000/api/v1'
-      url += "/event_lists/#{id}"
-      url += "?access_token=#{access_token}"
-      RestClient.delete(url)
+      api_call(:delete, url(id))
     end
 
     private
 
     attr_accessor :access_token
 
-    def url(id)
-      url = 'http://localhost:3000/api/v1'
-      url += "/event_lists/#{id}"
-      url += "?access_token=#{access_token}"
+    def url(id=nil)
+      "#{base_url}#{event_list}#{id}#{auth_param}"
+    end
+
+    def base_url
+      'http://localhost:3000/api/v1/'
+    end
+
+    def event_list
+      'event_lists/'
+    end
+
+    def auth_param
+      "?access_token=#{access_token}"
+    end
+
+    def api_call(method, url, params={})
+      RestClient.send(method, url, params) do |response, request, result, &blk|
+      case response.code
+        when 404, 422
+          response
+        else
+          response.return!(request, result, &blk)
+        end
+      end
     end
   end
 end

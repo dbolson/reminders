@@ -91,7 +91,7 @@ describe Reminders::Client do
 
       before do
         stub_request(:get,
-                     'http://localhost:3000/api/v1/event_lists?access_token=access-token')
+                     'http://localhost:3000/api/v1/event_lists/?access_token=access-token')
           .to_return(body: response, status: 200)
       end
 
@@ -113,7 +113,7 @@ describe Reminders::Client do
 
         before do
           stub_request(:post,
-                       'http://localhost:3000/api/v1/event_lists?access_token=access-token')
+                       'http://localhost:3000/api/v1/event_lists/?access_token=access-token')
             .to_return(body: response, status: 201)
         end
 
@@ -132,7 +132,7 @@ describe Reminders::Client do
 
         before do
           stub_request(:post,
-                       'http://localhost:3000/api/v1/event_lists?access_token=access-token')
+                       'http://localhost:3000/api/v1/event_lists/?access_token=access-token')
             .to_return(body: response, status: 422)
         end
 
