@@ -96,6 +96,7 @@ describe Reminders::Client do
       end
 
       it 'is a collection of EventLists' do
+        puts event_list1.inspect
         expect(event_list1).to be_a_kind_of(Reminders::EventList)
         expect(event_list1.id).to eq(1)
         expect(event_list2).to be_a_kind_of(Reminders::EventList)

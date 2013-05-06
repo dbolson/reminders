@@ -4,18 +4,13 @@
 f = Reminders::Client.new(email, api_key)
 
 f.event_lists
-  [event_list1, event_list2]
-
 f.event_list(id)
-
 f.create_event_list(name: 'name')
-
 f.update_event_list(id, name: 'another name')
-
 f.delete_event_list(id)
 
-f.event_lists.status
-f.event_lists.raw_response
+f.event_list.status
+f.event_list.raw_response
 
 f.events
 f.events(event_list)
