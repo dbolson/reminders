@@ -15,12 +15,6 @@ shared_examples_for 'an api object' do
     end
   end
 
-  describe '#name' do
-    specify do
-      expect(instance.name).to eq('name')
-    end
-  end
-
   describe '#created_at' do
     specify do
       expect(instance.created_at).to eq('2000-01-01T00:00:00Z')

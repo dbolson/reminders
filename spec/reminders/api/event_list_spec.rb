@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'reminders/api/base'
 require 'reminders/api/event_list'
 
 describe Reminders::Api::EventList do
