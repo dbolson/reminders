@@ -25,7 +25,7 @@ module Reminders
     attr_accessor :url
 
     def api_call(method, params={})
-      RestClient.send(method, url, params) do |response, request, result, &blk|
+      client.send(method, url, params) do |response, request, result, &blk|
       case response.code
         when 404, 422
           response
@@ -33,6 +33,10 @@ module Reminders
           response.return!(request, result, &blk)
         end
       end
+    end
+
+    def client
+      RestClient
     end
   end
 end
