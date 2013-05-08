@@ -31,21 +31,24 @@ module Reminders
     end
 
     def create_event_list(params)
-      request = Request.new(access_token).post(params)
+      url = "http://localhost:3000/api/v1/event_lists/?access_token=#{access_token}"
+      request = Request.post(url, params)
       response = Response.new.parse(request)
 
       build_event_list(request, response)
     end
 
     def update_event_list(id, params)
-      request = Request.new(access_token).put(id, params)
+      url = "http://localhost:3000/api/v1/event_lists/#{id}?access_token=#{access_token}"
+      request = Request.put(url, params)
       response = Response.new.parse(request)
 
       build_event_list(request, response)
     end
 
     def delete_event_list(id)
-      request = Request.new(access_token).delete(id)
+      url = "http://localhost:3000/api/v1/event_lists/#{id}?access_token=#{access_token}"
+      request = Request.delete(url)
       response = Response.new.parse(request)
 
       build_event_list(request, response)

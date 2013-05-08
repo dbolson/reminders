@@ -4,23 +4,18 @@ require 'reminders/request'
 
 describe Reminders::Request do
   let(:request) { Reminders::Request }
-  let(:base_url) { 'http://localhost:3000/api/v1/event_lists/' }
-  let(:response) { '{"fake":"response"}' }
+  let(:response) { '{"response":"body"}' }
 
   describe '#get' do
     it 'retrieves a json response' do
-      stub_request(:get, "#{base_url}id?access_token=access-token")
-        .to_return(body: response, status: 200)
-      expect(request.new('access-token').get('id'))
-        .to eq('{"fake":"response"}')
+      stub_request(:get, 'url').to_return(body: response, status: 200)
+      expect(request.get('url')).to eq(response)
     end
 
     context 'without a resource to return' do
       it 'retrieves a json response' do
-        stub_request(:get, "#{base_url}id?access_token=access-token")
-          .to_return(body: response, status: 404)
-        expect(request.new('access-token').get('id'))
-          .to eq('{"fake":"response"}')
+        stub_request(:get, 'url').to_return(body: response, status: 404)
+        expect(request.get('url')).to eq(response)
       end
     end
   end
@@ -28,19 +23,19 @@ describe Reminders::Request do
   describe '#post' do
     context 'with a valid response' do
       it 'retrieves a json response' do
-        stub_request(:post, "#{base_url}?access_token=access-token")
+        stub_request(:post, 'url')
+          .with(body: { fake: 'param' })
           .to_return(body: response, status: 200)
-        expect(request.new('access-token').post(fake: 'param'))
-          .to eq('{"fake":"response"}')
+        expect(request.post('url', fake: 'param')).to eq(response)
       end
     end
 
     context 'with an invalid response' do
       it 'retrieves a json response' do
-        stub_request(:post, "#{base_url}?access_token=access-token")
+        stub_request(:post, 'url')
+          .with(body: { fake: 'param' })
           .to_return(body: response, status: 422)
-        expect(request.new('access-token').post(fake: 'param'))
-          .to eq('{"fake":"response"}')
+        expect(request.post('url', fake: 'param')).to eq(response)
       end
     end
   end
@@ -48,29 +43,27 @@ describe Reminders::Request do
   describe '#put' do
     context 'with a valid response' do
       it 'retrieves a json response' do
-        stub_request(:put, "#{base_url}id?access_token=access-token")
+        stub_request(:put, 'url')
+          .with(body: { fake: 'param' })
           .to_return(body: response, status: 200)
-        expect(request.new('access-token').put('id', fake: 'param'))
-          .to eq('{"fake":"response"}')
+        expect(request.put('url', fake: 'param')).to eq(response)
       end
     end
 
     context 'with an invalid response' do
       it 'retrieves a json response' do
-        stub_request(:put, "#{base_url}id?access_token=access-token")
+        stub_request(:put, 'url')
+          .with(body: { fake: 'param' })
           .to_return(body: response, status: 422)
-        expect(request.new('access-token').put('id', fake: 'param'))
-          .to eq('{"fake":"response"}')
+        expect(request.put('url', fake: 'param')).to eq(response)
       end
     end
   end
 
   describe '#delete' do
     it 'retrieves a json response' do
-      stub_request(:delete, "#{base_url}id?access_token=access-token")
-        .to_return(body: response, status: 200)
-      expect(request.new('access-token').delete('id'))
-        .to eq('{"fake":"response"}')
+      stub_request(:delete, 'url').to_return(body: response, status: 200)
+      expect(request.delete('url')).to eq(response)
     end
   end
 end
