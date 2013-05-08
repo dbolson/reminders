@@ -65,45 +65,73 @@ describe Reminders::Client do
       end
     end
 
-    describe '#event_list' do
-      let(:response) { File.read('spec/fixtures/event_list.json') }
-      let(:result) { client.new.event_list(1) }
+    shared_examples_for 'a delegated api object' do
+      let(:object_type) { api_class_name(object) }
+      let(:response) { File.read("spec/fixtures/#{object_type}.json") }
+      let(:instance) { Reminders::Client.new.send(object_type, id) }
 
       before do
         stub_request(:get,
-                     'http://localhost:3000/api/v1/event_lists/1?access_token=access-token')
+                     "http://localhost:3000/api/v1/#{object_type}s/1?access_token=access-token")
           .to_return(body: response, status: 200)
       end
 
-      specify { expect(result).to be_a_kind_of(Reminders::Api::EventList) }
-      specify { expect(result.id).to eq(1) }
-      specify { expect(result.name).to eq('name') }
-      specify { expect(result.created_at).to eq('2000-01-01T00:00:00Z') }
-      specify { expect(result.updated_at).to eq('2000-01-01T00:00:01Z') }
-      specify { expect(result.status).to eq(200) }
+      specify { expect(instance).to be_a_kind_of(object) }
+      specify { expect(instance.id).to eq(1) }
+      specify { expect(instance.name).to eq('name') }
+      specify { expect(instance.created_at).to eq('2000-01-01T00:00:00Z') }
+      specify { expect(instance.updated_at).to eq('2000-01-01T00:00:01Z') }
+      specify { expect(instance.status).to eq(200) }
+    end
+
+    shared_examples_for 'a delegated api object collection' do
+      let(:object_type) { api_class_name(object) }
+      let(:response) { File.read("spec/fixtures/#{object_type}s.json") }
+      let(:instance) { Reminders::Client.new.send("#{object_type}s") }
+      let(:instance1) { instance[0] }
+      let(:instance2) { instance[1] }
+
+      before do
+        stub_request(:get,
+                     "http://localhost:3000/api/v1/#{object_type}s/?access_token=access-token")
+          .to_return(body: response, status: 200)
+      end
+
+      it "is a collection" do
+        expect(instance1).to be_a_kind_of(object)
+        expect(instance1.id).to eq(1)
+        expect(instance2).to be_a_kind_of(object)
+        expect(instance2.id).to eq(2)
+      end
+
+      specify { expect(instance1.status).to eq(200) }
+      specify { expect(instance2.status).to eq(200) }
+    end
+
+    describe '#event' do
+      let(:object) { Reminders::Api::Event }
+      let(:id) { 1 }
+
+      it_behaves_like 'a delegated api object'
+    end
+
+    describe '#events' do
+      let(:object) { Reminders::Api::Event }
+
+      it_behaves_like 'a delegated api object collection'
+    end
+
+    describe '#event_list' do
+      let(:object) { Reminders::Api::EventList }
+      let(:id) { 1 }
+
+      it_behaves_like 'a delegated api object'
     end
 
     describe '#event_lists' do
-      let(:response) { File.read('spec/fixtures/event_lists.json') }
-      let(:result) { client.new.event_lists }
-      let(:event_list1) { result[0] }
-      let(:event_list2) { result[1] }
+      let(:object) { Reminders::Api::EventList }
 
-      before do
-        stub_request(:get,
-                     'http://localhost:3000/api/v1/event_lists/?access_token=access-token')
-          .to_return(body: response, status: 200)
-      end
-
-      it 'is a collection of EventLists' do
-        expect(event_list1).to be_a_kind_of(Reminders::Api::EventList)
-        expect(event_list1.id).to eq(1)
-        expect(event_list2).to be_a_kind_of(Reminders::Api::EventList)
-        expect(event_list2.id).to eq(2)
-      end
-
-      specify { expect(event_list1.status).to eq(200) }
-      specify { expect(event_list2.status).to eq(200) }
+      it_behaves_like 'a delegated api object collection'
     end
 
     describe '#create_event_list' do

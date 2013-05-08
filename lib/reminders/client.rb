@@ -1,4 +1,22 @@
 module Reminders
+  class UrlBuilder
+    def initialize(access_token)
+      @access_token = access_token
+    end
+
+    def event_url(id=nil)
+      "http://localhost:3000/api/v1/events/#{id}?access_token=#{access_token}"
+    end
+
+    def event_list_url(id=nil)
+      "http://localhost:3000/api/v1/event_lists/#{id}?access_token=#{access_token}"
+    end
+
+    private
+
+    attr_accessor :access_token
+  end
+
   class Client
     attr_reader :access_token
 
@@ -15,7 +33,7 @@ module Reminders
     end
 
     def event(id)
-      url = "http://localhost:3000/api/v1/events/#{id}?access_token=#{access_token}"
+      url = UrlBuilder.new(access_token).event_url(id)
       request = Request.get(url)
       response = Response.new.parse(request)
 
@@ -23,7 +41,7 @@ module Reminders
     end
 
     def events
-      url = "http://localhost:3000/api/v1/events/?access_token=#{access_token}"
+      url = UrlBuilder.new(access_token).event_url
       request = Request.get(url)
       response = Response.new.parse(request)
 
@@ -33,7 +51,7 @@ module Reminders
     end
 
     def create_event(params)
-      url = "http://localhost:3000/api/v1/events/?access_token=#{access_token}"
+      url = UrlBuilder.new(access_token).event_url
       request = Request.post(url, params)
       response = Response.new.parse(request)
 
@@ -41,7 +59,7 @@ module Reminders
     end
 
     def update_event(id, params)
-      url = "http://localhost:3000/api/v1/events/#{id}?access_token=#{access_token}"
+      url = UrlBuilder.new(access_token).event_url(id)
       request = Request.put(url, params)
       response = Response.new.parse(request)
 
@@ -49,7 +67,7 @@ module Reminders
     end
 
     def delete_event(id)
-      url = "http://localhost:3000/api/v1/events/#{id}?access_token=#{access_token}"
+      url = UrlBuilder.new(access_token).event_url(id)
       request = Request.new(access_token).delete(id)
       response = Response.new.parse(request)
 
@@ -57,7 +75,7 @@ module Reminders
     end
 
     def event_list(id)
-      url = "http://localhost:3000/api/v1/event_lists/#{id}?access_token=#{access_token}"
+      url = UrlBuilder.new(access_token).event_list_url(id)
       request = Request.get(url)
       response = Response.new.parse(request)
 
@@ -65,7 +83,7 @@ module Reminders
     end
 
     def event_lists
-      url = "http://localhost:3000/api/v1/event_lists/?access_token=#{access_token}"
+      url = UrlBuilder.new(access_token).event_list_url
       request = Request.get(url)
       response = Response.new.parse(request)
 
@@ -75,7 +93,7 @@ module Reminders
     end
 
     def create_event_list(params)
-      url = "http://localhost:3000/api/v1/event_lists/?access_token=#{access_token}"
+      url = UrlBuilder.new(access_token).event_list_url
       request = Request.post(url, params)
       response = Response.new.parse(request)
 
@@ -83,7 +101,7 @@ module Reminders
     end
 
     def update_event_list(id, params)
-      url = "http://localhost:3000/api/v1/event_lists/#{id}?access_token=#{access_token}"
+      url = UrlBuilder.new(access_token).event_list_url(id)
       request = Request.put(url, params)
       response = Response.new.parse(request)
 
@@ -91,7 +109,7 @@ module Reminders
     end
 
     def delete_event_list(id)
-      url = "http://localhost:3000/api/v1/event_lists/#{id}?access_token=#{access_token}"
+      url = UrlBuilder.new(access_token).event_list_url(id)
       request = Request.delete(url)
       response = Response.new.parse(request)
 
