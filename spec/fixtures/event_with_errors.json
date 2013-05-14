@@ -1,14 +1,14 @@
 {
   "id":null,
-  "name":"event name",
-  "description":"event description",
-  "due_at":"2000-01-11T00:00:00Z",
-  "created_at":"2000-01-01T00:00:00Z",
-  "updated_at":"2000-01-01T00:00:01Z",
+  "name":"",
+  "description":"",
+  "due_at":"",
+  "created_at":"",
+  "updated_at":"",
   "errors":["Name can't be blank"],
   "event_list":{
     "id":1,
-    "name":"event list name",
+    "name":"name",
     "created_at":"2000-01-01T00:00:00Z",
     "updated_at":"2000-01-01T00:00:01Z"
   }

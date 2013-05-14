@@ -91,3 +91,54 @@ shared_examples_for 'it creates an instance' do
     specify { expect(result.status).to eq(422) }
   end
 end
+
+shared_examples_for 'it updates an instance' do
+  let(:object_type) { api_class_name(object) }
+
+  context 'with valid params' do
+    let(:response) { File.read("spec/fixtures/#{object_type}.json") }
+    let(:result) {
+      client.new.send("update_#{object_type}", 1, name: 'name')
+    }
+
+    before do
+    stub_request(:put,
+                 "http://localhost:3000/api/v1/#{object_type}s/1?access_token=access-token")
+      .to_return(body: response, status: 200)
+    end
+
+    it 'updates the event list' do
+      expect(result).to be_a_kind_of(object)
+    end
+
+    it 'updates all fields' do
+      params.each do |k, v|
+        expect(result.send(k)).to eq(v)
+      end
+    end
+
+    specify { expect(result.status).to eq(200) }
+  end
+
+  context 'with invalid params' do
+    let(:response) {
+      File.read("spec/fixtures/#{object_type}_with_errors.json")
+    }
+    let(:result) {
+      client.new.send("update_#{object_type}", 1, name: 'name')
+    }
+
+    before do
+      stub_request(:put,
+                   "http://localhost:3000/api/v1/#{object_type}s/1?access_token=access-token")
+        .to_return(body: response, status: 422)
+    end
+
+    it 'shows errors' do
+      expect(result.name).to eq('')
+      expect(result.errors).to eq(["Name can't be blank"])
+    end
+
+    specify { expect(result.status).to eq(422) }
+  end
+end

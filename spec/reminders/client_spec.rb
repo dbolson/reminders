@@ -78,6 +78,17 @@ describe Reminders::Client do
       it_behaves_like 'a delegated api object collection'
     end
 
+    describe '#create_event' do
+      let(:object) { Reminders::Api::Event }
+      let(:params) {{
+        name: 'name',
+        description: 'description',
+        due_at: '2000-01-11T00:00:00Z'
+      }}
+
+      it_behaves_like 'it creates an instance'
+    end
+
     describe '#event_list' do
       let(:object) { Reminders::Api::EventList }
       let(:id) { 1 }
@@ -98,7 +109,14 @@ describe Reminders::Client do
       it_behaves_like 'it creates an instance'
     end
 
-    describe '#create_event' do
+    describe '#update_event_list' do
+      let(:object) { Reminders::Api::EventList }
+      let(:params) {{ name: 'name' }}
+
+      it_behaves_like 'it updates an instance'
+    end
+
+    describe '#update_event' do
       let(:object) { Reminders::Api::Event }
       let(:params) {{
         name: 'name',
@@ -106,46 +124,7 @@ describe Reminders::Client do
         due_at: '2000-01-11T00:00:00Z'
       }}
 
-      it_behaves_like 'it creates an instance'
-    end
-
-    describe '#update_event_list' do
-      context 'with valid params' do
-        let(:response) { File.read('spec/fixtures/event_list.json') }
-        let(:result) { client.new.update_event_list(1, name: 'name') }
-
-        before do
-          stub_request(:put,
-                       'http://localhost:3000/api/v1/event_lists/1?access_token=access-token')
-            .to_return(body: response, status: 200)
-        end
-
-        it 'updates the event list' do
-          expect(result).to be_a_kind_of(Reminders::Api::EventList)
-        end
-
-        specify { expect(result.status).to eq(200) }
-      end
-
-      context 'with invalid params' do
-        let(:response) {
-          File.read('spec/fixtures/event_list_with_errors.json')
-        }
-        let(:result) { client.new.update_event_list(1, name: 'invalid') }
-
-        before do
-          stub_request(:put,
-                       'http://localhost:3000/api/v1/event_lists/1?access_token=access-token')
-            .to_return(body: response, status: 422)
-        end
-
-        it 'shows errors' do
-          expect(result.name).to eq('')
-          expect(result.errors).to eq(["Name can't be blank"])
-        end
-
-        specify { expect(result.status).to eq(422) }
-      end
+      it_behaves_like 'it updates an instance'
     end
 
     describe '#delete_event_list' do
