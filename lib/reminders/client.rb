@@ -68,7 +68,7 @@ module Reminders
 
     def delete_event(id)
       url = UrlBuilder.new(access_token).event_url(id)
-      request = Request.new(access_token).delete(id)
+      request = Request.delete(url)
       response = Response.new.parse(request)
 
       build_event(request, response)
