@@ -1,3 +1,4 @@
+require 'awesome_print'
 require 'json'
 require 'rest_client'
 require 'webmock/rspec'
