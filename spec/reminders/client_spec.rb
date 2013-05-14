@@ -65,49 +65,6 @@ describe Reminders::Client do
       end
     end
 
-    shared_examples_for 'a delegated api object' do
-      let(:object_type) { api_class_name(object) }
-      let(:response) { File.read("spec/fixtures/#{object_type}.json") }
-      let(:instance) { Reminders::Client.new.send(object_type, id) }
-
-      before do
-        stub_request(:get,
-                     "http://localhost:3000/api/v1/#{object_type}s/1?access_token=access-token")
-          .to_return(body: response, status: 200)
-      end
-
-      specify { expect(instance).to be_a_kind_of(object) }
-      specify { expect(instance.id).to eq(1) }
-      specify { expect(instance.name).to eq('name') }
-      specify { expect(instance.created_at).to eq('2000-01-01T00:00:00Z') }
-      specify { expect(instance.updated_at).to eq('2000-01-01T00:00:01Z') }
-      specify { expect(instance.status).to eq(200) }
-    end
-
-    shared_examples_for 'a delegated api object collection' do
-      let(:object_type) { api_class_name(object) }
-      let(:response) { File.read("spec/fixtures/#{object_type}s.json") }
-      let(:instance) { Reminders::Client.new.send("#{object_type}s") }
-      let(:instance1) { instance[0] }
-      let(:instance2) { instance[1] }
-
-      before do
-        stub_request(:get,
-                     "http://localhost:3000/api/v1/#{object_type}s/?access_token=access-token")
-          .to_return(body: response, status: 200)
-      end
-
-      it "is a collection" do
-        expect(instance1).to be_a_kind_of(object)
-        expect(instance1.id).to eq(1)
-        expect(instance2).to be_a_kind_of(object)
-        expect(instance2.id).to eq(2)
-      end
-
-      specify { expect(instance1.status).to eq(200) }
-      specify { expect(instance2.status).to eq(200) }
-    end
-
     describe '#event' do
       let(:object) { Reminders::Api::Event }
       let(:id) { 1 }
@@ -135,91 +92,21 @@ describe Reminders::Client do
     end
 
     describe '#create_event_list' do
-      context 'with valid params' do
-        let(:response) { File.read('spec/fixtures/event_list.json') }
-        let(:result) { client.new.create_event_list(name: 'name') }
+      let(:object) { Reminders::Api::EventList }
+      let(:params) {{ name: 'name' }}
 
-        before do
-          stub_request(:post,
-                       'http://localhost:3000/api/v1/event_lists/?access_token=access-token')
-            .to_return(body: response, status: 201)
-        end
-
-        it 'creates an event list' do
-          expect(result).to be_a_kind_of(Reminders::Api::EventList)
-        end
-
-        specify { expect(result.name).to eq('name') }
-        specify { expect(result.status).to eq(201) }
-      end
-
-      context 'with invalid params' do
-        let(:response) {
-          File.read('spec/fixtures/event_list_with_errors.json')
-        }
-        let(:result) { client.new.create_event_list(name: 'invalid') }
-
-        before do
-          stub_request(:post,
-                       'http://localhost:3000/api/v1/event_lists/?access_token=access-token')
-            .to_return(body: response, status: 422)
-        end
-
-        it 'shows errors' do
-          expect(result.id).to be_nil
-          expect(result.errors).to eq(["Name can't be blank"])
-        end
-
-        specify { expect(result.status).to eq(422) }
-      end
+      it_behaves_like 'it creates an instance'
     end
 
     describe '#create_event' do
-      before do
-        Time.stub(:now).and_return(Time.mktime(2000, 1, 1))
-      end
+      let(:object) { Reminders::Api::Event }
+      let(:params) {{
+        name: 'name',
+        description: 'description',
+        due_at: '2000-01-11T00:00:00Z'
+      }}
 
-      context 'with valid params' do
-        let(:response) { File.read('spec/fixtures/event.json') }
-        let(:result) {
-          client.new.create_event(name: 'name',
-                                  description: 'description',
-                                  due_at: Time.now)
-        }
-
-        before do
-          stub_request(:post,
-                       'http://localhost:3000/api/v1/events/?access_token=access-token')
-            .to_return(body: response, status: 201)
-        end
-
-        it 'creates an event' do
-          expect(result).to be_a_kind_of(Reminders::Api::Event)
-        end
-
-        specify { expect(result.name).to eq('name') }
-        specify { expect(result.status).to eq(201) }
-      end
-
-      context 'with invalid params' do
-        let(:response) {
-          File.read('spec/fixtures/event_with_errors.json')
-        }
-        let(:result) { client.new.create_event(name: 'invalid') }
-
-        before do
-          stub_request(:post,
-                       'http://localhost:3000/api/v1/events/?access_token=access-token')
-            .to_return(body: response, status: 422)
-        end
-
-        it 'shows errors' do
-          expect(result.id).to be_nil
-          expect(result.errors).to eq(["Name can't be blank"])
-        end
-
-        specify { expect(result.status).to eq(422) }
-      end
+      it_behaves_like 'it creates an instance'
     end
 
     describe '#update_event_list' do
