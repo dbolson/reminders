@@ -107,7 +107,7 @@ shared_examples_for 'it updates an instance' do
       .to_return(body: response, status: 200)
     end
 
-    it 'updates the event list' do
+    it 'updates the instance' do
       expect(result).to be_a_kind_of(object)
     end
 
@@ -141,4 +141,22 @@ shared_examples_for 'it updates an instance' do
 
     specify { expect(result.status).to eq(422) }
   end
+end
+
+shared_examples_for 'it deletes an instance' do
+  let(:object_type) { api_class_name(object) }
+  let(:response) { File.read("spec/fixtures/#{object_type}.json") }
+  let(:result) { client.new.send("delete_#{object_type}", 1) }
+
+  before do
+    stub_request(:delete,
+                 "http://localhost:3000/api/v1/#{object_type}s/1?access_token=access-token")
+        .to_return(body: response, status: 200)
+  end
+
+  it 'deletes the returned instance' do
+    expect(result.send(field)).to eq('name')
+  end
+
+  specify { expect(result.status).to eq(200) }
 end

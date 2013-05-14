@@ -89,6 +89,24 @@ describe Reminders::Client do
       it_behaves_like 'it creates an instance'
     end
 
+    describe '#update_event' do
+      let(:object) { Reminders::Api::Event }
+      let(:params) {{
+        name: 'name',
+        description: 'description',
+        due_at: '2000-01-11T00:00:00Z'
+      }}
+
+      it_behaves_like 'it updates an instance'
+    end
+
+    describe '#delete_event' do
+      let(:object) { Reminders::Api::Event }
+      let(:field) { :name }
+
+      it_behaves_like 'it deletes an instance'
+    end
+
     describe '#event_list' do
       let(:object) { Reminders::Api::EventList }
       let(:id) { 1 }
@@ -116,33 +134,11 @@ describe Reminders::Client do
       it_behaves_like 'it updates an instance'
     end
 
-    describe '#update_event' do
-      let(:object) { Reminders::Api::Event }
-      let(:params) {{
-        name: 'name',
-        description: 'description',
-        due_at: '2000-01-11T00:00:00Z'
-      }}
-
-      it_behaves_like 'it updates an instance'
-    end
-
     describe '#delete_event_list' do
-      let(:response) { File.read('spec/fixtures/event_list.json') }
-      let(:result) { client.new.delete_event_list(1) }
+      let(:object) { Reminders::Api::EventList }
+      let(:field) { :name }
 
-      before do
-        stub_request(:delete,
-                     'http://localhost:3000/api/v1/event_lists/1?access_token=access-token')
-            .to_return(body: response, status: 200)
-      end
-
-      it 'deletes the event list' do
-        expect(result.name).to eq('name')
-        event_list = client.new.delete_event_list(1)
-      end
-
-      specify { expect(result.status).to eq(200) }
+      it_behaves_like 'it deletes an instance'
     end
   end
 end
