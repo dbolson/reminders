@@ -149,6 +149,7 @@ describe Reminders::Client do
           expect(result).to be_a_kind_of(Reminders::Api::EventList)
         end
 
+        specify { expect(result.name).to eq('name') }
         specify { expect(result.status).to eq(201) }
       end
 
@@ -161,6 +162,54 @@ describe Reminders::Client do
         before do
           stub_request(:post,
                        'http://localhost:3000/api/v1/event_lists/?access_token=access-token')
+            .to_return(body: response, status: 422)
+        end
+
+        it 'shows errors' do
+          expect(result.id).to be_nil
+          expect(result.errors).to eq(["Name can't be blank"])
+        end
+
+        specify { expect(result.status).to eq(422) }
+      end
+    end
+
+    describe '#create_event' do
+      before do
+        Time.stub(:now).and_return(Time.mktime(2000, 1, 1))
+      end
+
+      context 'with valid params' do
+        let(:response) { File.read('spec/fixtures/event.json') }
+        let(:result) {
+          client.new.create_event(name: 'name',
+                                  description: 'description',
+                                  due_at: Time.now)
+        }
+
+        before do
+          stub_request(:post,
+                       'http://localhost:3000/api/v1/events/?access_token=access-token')
+            .to_return(body: response, status: 201)
+        end
+
+        it 'creates an event' do
+          expect(result).to be_a_kind_of(Reminders::Api::Event)
+        end
+
+        specify { expect(result.name).to eq('name') }
+        specify { expect(result.status).to eq(201) }
+      end
+
+      context 'with invalid params' do
+        let(:response) {
+          File.read('spec/fixtures/event_with_errors.json')
+        }
+        let(:result) { client.new.create_event(name: 'invalid') }
+
+        before do
+          stub_request(:post,
+                       'http://localhost:3000/api/v1/events/?access_token=access-token')
             .to_return(body: response, status: 422)
         end
 
