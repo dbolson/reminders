@@ -52,7 +52,7 @@ module Reminders
 
     def create_event(params)
       url = UrlBuilder.new(access_token).event_url
-      request = Request.post(url, params)
+      request = Request.post(url, 'event' => params)
       response = Response.new.parse(request)
 
       build_event(request, response)
@@ -60,7 +60,7 @@ module Reminders
 
     def update_event(id, params)
       url = UrlBuilder.new(access_token).event_url(id)
-      request = Request.put(url, params)
+      request = Request.put(url, 'event' => params)
       response = Response.new.parse(request)
 
       build_event(request, response)
@@ -94,7 +94,7 @@ module Reminders
 
     def create_event_list(params)
       url = UrlBuilder.new(access_token).event_list_url
-      request = Request.post(url, params)
+      request = Request.post(url, 'event_list' => params)
       response = Response.new.parse(request)
 
       build_event_list(request, response)
@@ -102,7 +102,7 @@ module Reminders
 
     def update_event_list(id, params)
       url = UrlBuilder.new(access_token).event_list_url(id)
-      request = Request.put(url, params)
+      request = Request.put(url, 'event_list' => params)
       response = Response.new.parse(request)
 
       build_event_list(request, response)

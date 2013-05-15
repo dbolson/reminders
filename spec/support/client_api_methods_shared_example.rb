@@ -47,12 +47,13 @@ shared_examples_for 'it creates an instance' do
   context 'with valid params' do
     let(:response) { File.read("spec/fixtures/#{object_type}.json") }
     let(:result) {
-      client.new.send("create_#{object_type}", name: 'name')
+      client.new.send("create_#{object_type}", params)
     }
 
     before do
       stub_request(:post,
                    "http://localhost:3000/api/v1/#{object_type}s/?access_token=access-token")
+        .with(body: { object_type.to_sym => params })
         .to_return(body: response, status: 201)
     end
 
@@ -74,12 +75,13 @@ shared_examples_for 'it creates an instance' do
       File.read("spec/fixtures/#{object_type}_with_errors.json")
     }
     let(:result) {
-      client.new.send("create_#{object_type}", name: 'invalid')
+      client.new.send("create_#{object_type}", params)
     }
 
     before do
       stub_request(:post,
                    "http://localhost:3000/api/v1/#{object_type}s/?access_token=access-token")
+        .with(body: { object_type.to_sym => params })
         .to_return(body: response, status: 422)
     end
 
@@ -98,12 +100,13 @@ shared_examples_for 'it updates an instance' do
   context 'with valid params' do
     let(:response) { File.read("spec/fixtures/#{object_type}.json") }
     let(:result) {
-      client.new.send("update_#{object_type}", 1, name: 'name')
+      client.new.send("update_#{object_type}", 1, params)
     }
 
     before do
     stub_request(:put,
                  "http://localhost:3000/api/v1/#{object_type}s/1?access_token=access-token")
+      .with(body: { object_type.to_sym => params })
       .to_return(body: response, status: 200)
     end
 
@@ -125,12 +128,13 @@ shared_examples_for 'it updates an instance' do
       File.read("spec/fixtures/#{object_type}_with_errors.json")
     }
     let(:result) {
-      client.new.send("update_#{object_type}", 1, name: 'name')
+      client.new.send("update_#{object_type}", 1, params)
     }
 
     before do
       stub_request(:put,
                    "http://localhost:3000/api/v1/#{object_type}s/1?access_token=access-token")
+        .with(body: { object_type.to_sym => params })
         .to_return(body: response, status: 422)
     end
 
