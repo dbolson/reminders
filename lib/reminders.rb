@@ -1,6 +1,7 @@
 require 'reminders/version'
 require 'reminders/configuration'
 require 'reminders/errors'
+require 'reminders/url_builder'
 require 'reminders/client'
 require 'reminders/request'
 require 'reminders/response'
