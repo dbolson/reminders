@@ -4,7 +4,7 @@ module Reminders
       @url = url
     end
 
-    def self.get(url, id=nil)
+    def self.get(url, args={})
       new(url).send(:api_call, :get)
     end
 
@@ -16,7 +16,7 @@ module Reminders
       new(url).send(:api_call, :put, params)
     end
 
-    def self.delete(url)
+    def self.delete(url, args={})
       new(url).send(:api_call, :delete)
     end
 
