@@ -15,90 +15,80 @@ module Reminders
     end
 
     def event(id)
-      url = UrlBuilder.new(access_token).event_url(id)
-      request = Request.get(url)
-      response = Response.new.parse(request)
-
-      build_event(request, response)
+      call_event(:get, id) do |request, response|
+        build_event(request, response)
+      end
     end
 
     def events
-      url = UrlBuilder.new(access_token).event_url
-      request = Request.get(url)
-      response = Response.new.parse(request)
-
-      response.map do |event_list|
-        build_event(request, event_list)
+      call_event(:get) do |request, response|
+        response.map { |event| build_event(request, event) }
       end
     end
 
     def create_event(params)
-      url = UrlBuilder.new(access_token).event_url
-      request = Request.post(url, 'event' => params)
-      response = Response.new.parse(request)
-
-      build_event(request, response)
+      call_event(:post, nil, 'event' => params) do |request, response|
+        build_event(request, response)
+      end
     end
 
     def update_event(id, params)
-      url = UrlBuilder.new(access_token).event_url(id)
-      request = Request.put(url, 'event' => params)
-      response = Response.new.parse(request)
-
-      build_event(request, response)
+      call_event(:put, id, 'event' => params) do |request, response|
+        build_event(request, response)
+      end
     end
 
     def delete_event(id)
-      url = UrlBuilder.new(access_token).event_url(id)
-      request = Request.delete(url)
-      response = Response.new.parse(request)
-
-      build_event(request, response)
+      call_event(:delete, id) do |request, response|
+        build_event(request, response)
+      end
     end
 
     def event_list(id)
-      url = UrlBuilder.new(access_token).event_list_url(id)
-      request = Request.get(url)
-      response = Response.new.parse(request)
-
-      build_event_list(request, response)
+      call_event_list(:get, id) do |request, response|
+        build_event_list(request, response)
+      end
     end
 
     def event_lists
-      url = UrlBuilder.new(access_token).event_list_url
-      request = Request.get(url)
-      response = Response.new.parse(request)
-
-      response.map do |event_list|
-        build_event_list(request, event_list)
+      call_event_list(:get) do |request, response|
+        response.map { |event_list| build_event_list(request, event_list) }
       end
     end
 
     def create_event_list(params)
-      url = UrlBuilder.new(access_token).event_list_url
-      request = Request.post(url, 'event_list' => params)
-      response = Response.new.parse(request)
-
-      build_event_list(request, response)
+      call_event_list(:post, nil, 'event_list' => params) do |request, response|
+        build_event_list(request, response)
+      end
     end
 
     def update_event_list(id, params)
-      url = UrlBuilder.new(access_token).event_list_url(id)
-      request = Request.put(url, 'event_list' => params)
-      response = Response.new.parse(request)
-
-      build_event_list(request, response)
+      call_event_list(:put, id, 'event_list' => params) do |request, response|
+        build_event_list(request, response)
+      end
     end
 
     def delete_event_list(id)
-      url = UrlBuilder.new(access_token).event_list_url(id)
-      request = Request.delete(url)
-      response = Response.new.parse(request)
-
-      build_event_list(request, response)
+      call_event_list(:delete, id) do |request, response|
+        build_event_list(request, response)
+      end
     end
 
     private
+
+    def call_event(method, id=nil, params={}, &blk)
+      url = UrlBuilder.new(access_token).event_url(id)
+      request = Request.send(method, url, params)
+      response = Response.new.parse(request)
+      blk.call(request, response)
+    end
+
+    def call_event_list(method, id=nil, params={}, &blk)
+      url = UrlBuilder.new(access_token).event_list_url(id)
+      request = Request.send(method, url, params)
+      response = Response.new.parse(request)
+      blk.call(request, response)
+    end
 
     def build_event_list(request, response)
       Api::EventList.new(response, status: request.code)
