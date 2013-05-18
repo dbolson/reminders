@@ -34,7 +34,7 @@ shared_examples_for 'an api object' do
       }
 
       it 'displays a list of errors' do
-        expect(instance.errors).to eq(["Name can't be blank"])
+        expect(instance.errors).to_not be_empty
       end
     end
 

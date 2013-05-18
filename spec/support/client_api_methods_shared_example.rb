@@ -11,9 +11,6 @@ shared_examples_for 'a delegated api object' do
 
   specify { expect(instance).to be_a_kind_of(object) }
   specify { expect(instance.id).to eq(1) }
-  specify { expect(instance.name).to eq('name') }
-  specify { expect(instance.created_at).to eq('2000-01-01T00:00:00Z') }
-  specify { expect(instance.updated_at).to eq('2000-01-01T00:00:01Z') }
   specify { expect(instance.status).to eq(200) }
 end
 
@@ -87,7 +84,7 @@ shared_examples_for 'it creates an instance' do
 
     it 'shows errors' do
       expect(result.id).to be_nil
-      expect(result.errors).to eq(["Name can't be blank"])
+      expect(result.errors).to_not be_empty
     end
 
     specify { expect(result.status).to eq(422) }
@@ -140,7 +137,7 @@ shared_examples_for 'it updates an instance' do
 
     it 'shows errors' do
       expect(result.name).to eq('')
-      expect(result.errors).to eq(["Name can't be blank"])
+      expect(result.errors).to_not be_empty
     end
 
     specify { expect(result.status).to eq(422) }
