@@ -5,31 +5,39 @@ module Reminders
     end
 
     def event_url(id=nil)
-      if id
-        resource = "/#{id}"
-      else
-        resource = ''
-      end
-
-      "http://localhost:3000/api/v1/events#{resource}?access_token=#{access_token}"
+      url('events', id)
     end
 
     def event_list_url(id=nil)
-      if id
-        resource = "/#{id}"
-      else
-        resource = ''
-      end
-
-      "http://localhost:3000/api/v1/event_lists#{resource}?access_token=#{access_token}"
+      url('event_lists', id)
     end
 
     def account_url
-      "http://localhost:3000/api/v1/accounts?access_token=#{access_token}"
+      url('accounts', nil)
     end
 
     private
 
     attr_accessor :access_token
+
+    def url(resource_type, id)
+      "#{endpoint}#{resource_type}#{resource(id)}#{access_token_param}"
+    end
+
+    def endpoint
+      'http://localhost:3000/api/v1/'
+    end
+
+    def resource(id)
+      if id
+        "/#{id}"
+      else
+        ''
+      end
+    end
+
+    def access_token_param
+      "?access_token=#{access_token}"
+    end
   end
 end

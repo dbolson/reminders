@@ -77,9 +77,7 @@ describe Reminders::Client do
       let(:object) { Reminders::Api::Account }
       let(:instance) { Reminders::Client.new.update_account(params) }
       let(:resource) { 'accounts' }
-      let(:params) {{
-        email: 'test@example.com'
-      }}
+      let(:params) {{ email: 'test@example.com' }}
 
       it_behaves_like 'it updates an instance'
     end
