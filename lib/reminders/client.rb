@@ -20,6 +20,12 @@ module Reminders
       end
     end
 
+    def update_account(params)
+      call_account(:put, 'account' => params) do |request, response|
+        build_account(request, response)
+      end
+    end
+
     def event(id)
       call_event(:get, id) do |request, response|
         build_event(request, response)
