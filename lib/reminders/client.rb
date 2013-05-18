@@ -15,11 +15,9 @@ module Reminders
     end
 
     def account
-      url = UrlBuilder.new(access_token).account_url
-      request = Request.get(url)
-      response = Response.new.parse(request)
-
-      Api::Account.new(response, status: request.code)
+      call_account(:get) do |request, response|
+        Api::Account.new(response, status: request.code)
+      end
     end
 
     def event(id)
@@ -83,6 +81,13 @@ module Reminders
     end
 
     private
+
+    def call_account(method, id=nil, params={}, &blk)
+      url = UrlBuilder.new(access_token).account_url
+      request = Request.send(method, url, params)
+      response = Response.new.parse(request)
+      blk.call(request, response)
+    end
 
     def call_event(method, id=nil, params={}, &blk)
       url = UrlBuilder.new(access_token).event_url(id)
