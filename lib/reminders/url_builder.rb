@@ -12,6 +12,10 @@ module Reminders
       "http://localhost:3000/api/v1/event_lists/#{id}?access_token=#{access_token}"
     end
 
+    def account_url
+      "http://localhost:3000/api/v1/accounts?access_token=#{access_token}"
+    end
+
     private
 
     attr_accessor :access_token

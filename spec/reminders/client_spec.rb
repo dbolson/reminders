@@ -65,6 +65,17 @@ describe Reminders::Client do
       end
     end
 
+    describe '#account' do
+      let(:object) { Reminders::Api::Account }
+      let(:instance) { Reminders::Client.new.account }
+      let(:resource) { 'accounts' }
+
+      it_behaves_like 'a delegated api object'
+    end
+
+    describe '#update_account' do
+    end
+
     describe '#event' do
       let(:object) { Reminders::Api::Event }
       let(:instance) { Reminders::Client.new.event(1) }

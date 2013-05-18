@@ -14,6 +14,14 @@ module Reminders
       end
     end
 
+    def account
+      url = UrlBuilder.new(access_token).account_url
+      request = Request.get(url)
+      response = Response.new.parse(request)
+
+      Api::Account.new(response, status: request.code)
+    end
+
     def event(id)
       call_event(:get, id) do |request, response|
         build_event(request, response)

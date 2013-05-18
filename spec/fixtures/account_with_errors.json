@@ -1,0 +1,7 @@
+{
+  "id":null,
+  "email":"",
+  "created_at":"",
+  "updated_at":"",
+  "errors":["Email is invalid"]
+}
