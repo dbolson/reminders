@@ -86,6 +86,36 @@ module Reminders
       end
     end
 
+    def subscriber(id)
+      call_subscriber(:get, id) do |request, response|
+        Api::Subscriber.new(response, status: request.code)
+      end
+    end
+
+    def subscribers
+      call_subscriber(:get) do |request, response|
+        response.map { |subscriber| build_subscriber(request, subscriber) }
+      end
+    end
+
+    def create_subscriber(params)
+      call_subscriber(:post, nil, 'subscriber' => params) do |request, response|
+        build_subscriber(request, response)
+      end
+    end
+
+    def update_subscriber(id, params)
+      call_subscriber(:put, id, 'subscriber' => params) do |request, response|
+        build_subscriber(request, response)
+      end
+    end
+
+    def delete_subscriber(id)
+      call_subscriber(:delete, id) do |request, response|
+        build_subscriber(request, response)
+      end
+    end
+
     private
 
     def call_account(method, params={}, &blk)
@@ -109,6 +139,13 @@ module Reminders
       blk.call(request, response)
     end
 
+    def call_subscriber(method, id=nil, params={}, &blk)
+      url = UrlBuilder.new(access_token).subscriber_url(id)
+      request = Request.send(method, url, params)
+      response = Response.new.parse(request)
+      blk.call(request, response)
+    end
+
     def build_account(request, response)
       Api::Account.new(response, status: request.code)
     end
@@ -119,6 +156,10 @@ module Reminders
 
     def build_event_list(request, response)
       Api::EventList.new(response, status: request.code)
+    end
+
+    def build_subscriber(request, response)
+      Api::Subscriber.new(response, status: request.code)
     end
   end
 end

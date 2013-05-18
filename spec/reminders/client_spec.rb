@@ -174,5 +174,48 @@ describe Reminders::Client do
 
       it_behaves_like 'it deletes an instance'
     end
+
+    describe '#subscriber' do
+      let(:object) { Reminders::Api::Subscriber }
+      let(:instance) { Reminders::Client.new.subscriber(1) }
+      let(:resource) { 'subscribers/1' }
+
+      it_behaves_like 'a delegated api object'
+    end
+
+    describe '#subscribers' do
+      let(:object) { Reminders::Api::Subscriber }
+      let(:instance) { Reminders::Client.new.subscribers }
+      let(:resource) { 'subscribers' }
+
+      it_behaves_like 'a delegated api object collection'
+    end
+
+    describe '#create_subscriber' do
+      let(:object) { Reminders::Api::Subscriber }
+      let(:instance) { Reminders::Client.new.create_subscriber(params) }
+      let(:resource) { 'subscribers' }
+      let(:params) {{ phone_number: '15555555555' }}
+
+      it_behaves_like 'it creates an instance'
+    end
+
+    describe '#update_subscriber' do
+      let(:object) { Reminders::Api::Subscriber }
+      let(:instance) { Reminders::Client.new.update_subscriber(1, params) }
+      let(:resource) { 'subscribers/1' }
+      let(:params) {{ phone_number: '15555555555' }}
+
+      it_behaves_like 'it updates an instance'
+    end
+
+    describe '#delete_subscriber' do
+      let(:object) { Reminders::Api::Subscriber }
+      let(:instance) { Reminders::Client.new.delete_subscriber(1) }
+      let(:resource) { 'subscribers/1' }
+      let(:field) { :phone_number }
+
+      it_behaves_like 'it deletes an instance'
+    end
   end
 end

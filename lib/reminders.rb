@@ -9,6 +9,7 @@ require 'reminders/api/base'
 require 'reminders/api/account'
 require 'reminders/api/event'
 require 'reminders/api/event_list'
+require 'reminders/api/subscriber'
 
 module Reminders
 end

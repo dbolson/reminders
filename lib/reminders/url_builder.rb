@@ -4,6 +4,10 @@ module Reminders
       @access_token = access_token
     end
 
+    def account_url
+      url('accounts', nil)
+    end
+
     def event_url(id=nil)
       url('events', id)
     end
@@ -12,8 +16,8 @@ module Reminders
       url('event_lists', id)
     end
 
-    def account_url
-      url('accounts', nil)
+    def subscriber_url(id=nil)
+      url('subscribers', id)
     end
 
     private
@@ -21,7 +25,11 @@ module Reminders
     attr_accessor :access_token
 
     def url(resource_type, id)
-      "#{endpoint}#{resource_type}#{resource(id)}#{access_token_param}"
+      url = endpoint
+      url += resource_type
+      url += resource(id)
+      url += access_token_param
+      url
     end
 
     def endpoint
