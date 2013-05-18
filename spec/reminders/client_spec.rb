@@ -67,19 +67,24 @@ describe Reminders::Client do
 
     describe '#event' do
       let(:object) { Reminders::Api::Event }
-      let(:id) { 1 }
+      let(:instance) { Reminders::Client.new.event(1) }
+      let(:resource) { 'events/1' }
 
       it_behaves_like 'a delegated api object'
     end
 
     describe '#events' do
       let(:object) { Reminders::Api::Event }
+      let(:instance) { Reminders::Client.new.events }
+      let(:resource) { 'events' }
 
       it_behaves_like 'a delegated api object collection'
     end
 
     describe '#create_event' do
       let(:object) { Reminders::Api::Event }
+      let(:instance) { Reminders::Client.new.create_event }
+      let(:resource) { 'events' }
       let(:params) {{
         name: 'name',
         description: 'description',
@@ -91,6 +96,8 @@ describe Reminders::Client do
 
     describe '#update_event' do
       let(:object) { Reminders::Api::Event }
+      let(:instance) { Reminders::Client.new.update_event(1) }
+      let(:resource) { 'events/1' }
       let(:params) {{
         name: 'name',
         description: 'description',
@@ -102,6 +109,8 @@ describe Reminders::Client do
 
     describe '#delete_event' do
       let(:object) { Reminders::Api::Event }
+      let(:instance) { Reminders::Client.new.delete_event(1) }
+      let(:resource) { 'events/1' }
       let(:field) { :name }
 
       it_behaves_like 'it deletes an instance'
@@ -109,19 +118,24 @@ describe Reminders::Client do
 
     describe '#event_list' do
       let(:object) { Reminders::Api::EventList }
-      let(:id) { 1 }
+      let(:instance) { Reminders::Client.new.event_list(1) }
+      let(:resource) { 'event_lists/1' }
 
       it_behaves_like 'a delegated api object'
     end
 
     describe '#event_lists' do
       let(:object) { Reminders::Api::EventList }
+      let(:instance) { Reminders::Client.new.event_lists }
+      let(:resource) { 'event_lists' }
 
       it_behaves_like 'a delegated api object collection'
     end
 
     describe '#create_event_list' do
       let(:object) { Reminders::Api::EventList }
+      let(:instance) { Reminders::Client.new.create_event_list }
+      let(:resource) { 'event_lists' }
       let(:params) {{ name: 'name' }}
 
       it_behaves_like 'it creates an instance'
@@ -129,6 +143,8 @@ describe Reminders::Client do
 
     describe '#update_event_list' do
       let(:object) { Reminders::Api::EventList }
+      let(:instance) { Reminders::Client.new.update_event_list(1) }
+      let(:resource) { 'event_lists/1' }
       let(:params) {{ name: 'name' }}
 
       it_behaves_like 'it updates an instance'
@@ -136,6 +152,8 @@ describe Reminders::Client do
 
     describe '#delete_event_list' do
       let(:object) { Reminders::Api::EventList }
+      let(:instance) { Reminders::Client.new.delete_event_list(1) }
+      let(:resource) { 'event_lists/1' }
       let(:field) { :name }
 
       it_behaves_like 'it deletes an instance'
