@@ -74,6 +74,14 @@ describe Reminders::Client do
     end
 
     describe '#update_account' do
+      let(:object) { Reminders::Api::Account }
+      let(:instance) { Reminders::Client.new.update_account(params) }
+      let(:resource) { 'accounts' }
+      let(:params) {{
+        email: 'test@example.com'
+      }}
+
+      it_behaves_like 'it updates an instance'
     end
 
     describe '#event' do
@@ -94,7 +102,7 @@ describe Reminders::Client do
 
     describe '#create_event' do
       let(:object) { Reminders::Api::Event }
-      let(:instance) { Reminders::Client.new.create_event }
+      let(:instance) { Reminders::Client.new.create_event(params) }
       let(:resource) { 'events' }
       let(:params) {{
         name: 'name',
@@ -107,7 +115,7 @@ describe Reminders::Client do
 
     describe '#update_event' do
       let(:object) { Reminders::Api::Event }
-      let(:instance) { Reminders::Client.new.update_event(1) }
+      let(:instance) { Reminders::Client.new.update_event(1, params) }
       let(:resource) { 'events/1' }
       let(:params) {{
         name: 'name',
@@ -122,7 +130,6 @@ describe Reminders::Client do
       let(:object) { Reminders::Api::Event }
       let(:instance) { Reminders::Client.new.delete_event(1) }
       let(:resource) { 'events/1' }
-      let(:field) { :name }
 
       it_behaves_like 'it deletes an instance'
     end
@@ -145,7 +152,7 @@ describe Reminders::Client do
 
     describe '#create_event_list' do
       let(:object) { Reminders::Api::EventList }
-      let(:instance) { Reminders::Client.new.create_event_list }
+      let(:instance) { Reminders::Client.new.create_event_list(params) }
       let(:resource) { 'event_lists' }
       let(:params) {{ name: 'name' }}
 
@@ -154,7 +161,7 @@ describe Reminders::Client do
 
     describe '#update_event_list' do
       let(:object) { Reminders::Api::EventList }
-      let(:instance) { Reminders::Client.new.update_event_list(1) }
+      let(:instance) { Reminders::Client.new.update_event_list(1, params) }
       let(:resource) { 'event_lists/1' }
       let(:params) {{ name: 'name' }}
 

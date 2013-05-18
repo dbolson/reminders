@@ -82,7 +82,7 @@ module Reminders
 
     private
 
-    def call_account(method, id=nil, params={}, &blk)
+    def call_account(method, params={}, &blk)
       url = UrlBuilder.new(access_token).account_url
       request = Request.send(method, url, params)
       response = Response.new.parse(request)
@@ -103,12 +103,16 @@ module Reminders
       blk.call(request, response)
     end
 
-    def build_event_list(request, response)
-      Api::EventList.new(response, status: request.code)
+    def build_account(request, response)
+      Api::Account.new(response, status: request.code)
     end
 
     def build_event(request, response)
       Api::Event.new(response, status: request.code)
+    end
+
+    def build_event_list(request, response)
+      Api::EventList.new(response, status: request.code)
     end
   end
 end
