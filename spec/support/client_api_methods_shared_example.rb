@@ -1,11 +1,13 @@
+def url
+  "http://localhost:3000/api/v1/#{resource}?access_token=access-token"
+end
+
 shared_examples_for 'a delegated api object' do
   let(:object_type) { api_class_name(object) }
   let(:response) { File.read("spec/fixtures/#{object_type}.json") }
 
   before do
-    stub_request(:get,
-                 "http://localhost:3000/api/v1/#{resource}?access_token=access-token")
-      .to_return(body: response, status: 200)
+    stub_request(:get, url).to_return(body: response, status: 200)
   end
 
   specify { expect(instance).to be_a_kind_of(object) }
@@ -21,9 +23,7 @@ shared_examples_for 'a delegated api object collection' do
   let(:instance2) { instance[1] }
 
   before do
-    stub_request(:get,
-                 "http://localhost:3000/api/v1/#{resource}/?access_token=access-token")
-      .to_return(body: response, status: 200)
+    stub_request(:get, url).to_return(body: response, status: 200)
   end
 
   it "is a collection" do
@@ -47,8 +47,7 @@ shared_examples_for 'it creates an instance' do
     }
 
     before do
-      stub_request(:post,
-                   "http://localhost:3000/api/v1/#{resource}/?access_token=access-token")
+      stub_request(:post, url)
         .with(body: { object_type.to_sym => params })
         .to_return(body: response, status: 201)
     end
@@ -75,8 +74,7 @@ shared_examples_for 'it creates an instance' do
     }
 
     before do
-      stub_request(:post,
-                   "http://localhost:3000/api/v1/#{resource}/?access_token=access-token")
+      stub_request(:post, url)
         .with(body: { object_type.to_sym => params })
         .to_return(body: response, status: 422)
     end
@@ -100,8 +98,7 @@ shared_examples_for 'it updates an instance' do
     }
 
     before do
-    stub_request(:put,
-                 "http://localhost:3000/api/v1/#{resource}?access_token=access-token")
+    stub_request(:put, url)
       .with(body: { object_type.to_sym => params })
       .to_return(body: response, status: 200)
     end
@@ -128,8 +125,7 @@ shared_examples_for 'it updates an instance' do
     }
 
     before do
-      stub_request(:put,
-                   "http://localhost:3000/api/v1/#{resource}?access_token=access-token")
+      stub_request(:put, url)
         .with(body: { object_type.to_sym => params })
         .to_return(body: response, status: 422)
     end
@@ -149,9 +145,7 @@ shared_examples_for 'it deletes an instance' do
   let(:result) { client.new.send("delete_#{object_type}", 1) }
 
   before do
-    stub_request(:delete,
-                 "http://localhost:3000/api/v1/#{resource}?access_token=access-token")
-        .to_return(body: response, status: 200)
+    stub_request(:delete, url).to_return(body: response, status: 200)
   end
 
   it 'deletes the returned instance' do
