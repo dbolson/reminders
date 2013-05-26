@@ -1,0 +1,9 @@
+{
+  "id":null,
+  "created_at":null,
+  "updated_at":null,
+  "errors":[
+    "Event list can't be blank",
+    "Subscriber can't be blank"
+  ]
+}

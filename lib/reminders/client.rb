@@ -122,6 +122,12 @@ module Reminders
       end
     end
 
+    def delete_subscription(id)
+      call_subscription(:delete, id) do |request, response|
+        build_subscription(request, response)
+      end
+    end
+
     private
 
     def call_account(method, params={}, &blk)

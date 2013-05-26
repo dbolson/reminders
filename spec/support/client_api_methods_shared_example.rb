@@ -53,12 +53,6 @@ shared_examples_for 'it creates an instance' do
       expect(instance).to be_a_kind_of(object)
     end
 
-    it 'saves all fields' do
-      params.each do |k, v|
-        expect(instance.send(k)).to eq(v)
-      end
-    end
-
     specify { expect(instance.status).to eq(201) }
   end
 
