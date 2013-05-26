@@ -116,6 +116,12 @@ module Reminders
       end
     end
 
+    def create_subscription(params)
+      call_subscription(:post, nil, 'subscription' => params) do |request, response|
+        build_subscription(request, response)
+      end
+    end
+
     private
 
     def call_account(method, params={}, &blk)
@@ -146,6 +152,13 @@ module Reminders
       blk.call(request, response)
     end
 
+    def call_subscription(method, id=nil, params={}, &blk)
+      url = UrlBuilder.new(access_token).subscription_url(id)
+      request = Request.send(method, url, params)
+      response = Response.new.parse(request)
+      blk.call(request, response)
+    end
+
     def build_account(request, response)
       Api::Account.new(response, status: request.code)
     end
@@ -160,6 +173,10 @@ module Reminders
 
     def build_subscriber(request, response)
       Api::Subscriber.new(response, status: request.code)
+    end
+
+    def build_subscription(request, response)
+      Api::Subscription.new(response, status: request.code)
     end
   end
 end

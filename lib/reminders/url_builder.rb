@@ -20,6 +20,10 @@ module Reminders
       url('subscribers', id)
     end
 
+    def subscription_url(id=nil)
+      url('subscriptions', id)
+    end
+
     private
 
     attr_accessor :access_token

@@ -217,5 +217,14 @@ describe Reminders::Client do
 
       it_behaves_like 'it deletes an instance'
     end
+
+    describe '#create_subscription' do
+      let(:object) { Reminders::Api::Subscription }
+      let(:instance) { Reminders::Client.new.create_subscription(params) }
+      let(:resource) { 'subscriptions' }
+      let(:params) {{ event_list_id: '1', subscriber_id: '1' }}
+
+      it_behaves_like 'it creates an instance'
+    end
   end
 end
